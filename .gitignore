@@ -1,0 +1,33 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+
+# Config files (user-specific)
+.browser_backup_config.json
+.brave_backup_config.json
+
+# Backup files
+*.backup
+*.bak
+
+# Logs
+logs/*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*
+debug_*
+EOF
