@@ -9,12 +9,13 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
 ## 🚀 Features
 
 - **Cross-platform bookmark detection** - Automatically finds Brave bookmarks on Windows from WSL
-- **Smart configuration** - Prompts for user and backup directory on first run
-- **OneDrive integration** - Suggests OneDrive folder for automatic cloud backup
+- **Automatic first-run setup** - Prompts for user and backup directory on first use
+- **Smart configuration** - Suggests OneDrive folder for automatic cloud backup
 - **Multiple scheduling options** - Works around WSL cron limitations
 - **Persistent configuration** - Saves settings for future runs
 - **Backup rotation** - Keeps only the most recent N backups
 - **Multiple profile support** - Backs up all Brave browser profiles
+- **Permission handling** - Gracefully handles WSL permission issues
 
 ## 📋 Table of Contents
 
@@ -24,7 +25,11 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
 - [Scheduling Options](#scheduling-options)
 - [Usage Examples](#usage-examples)
 - [Troubleshooting](#troubleshooting)
+- [File Structure](#file-structure)
+- [Best Practices](#best-practices)
 - [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
 
 ## 🛠 Installation
 
@@ -49,25 +54,49 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
    chmod +x bookmarkBackup.py
    ```
 
-3. **Initial setup:**
+3. **First run (auto-setup):**
    ```bash
-   python3 bookmarkBackup.py --setup
+   python3 bookmarkBackup.py -l
    ```
+   *The script will automatically prompt for configuration on first use.*
 
 ## 🚀 Quick Start
 
-### First Time Setup
+### First Time Setup (Automatic)
+
+The script automatically prompts for configuration on first run:
 
 ```bash
-# Run initial setup to configure user and backup directory
-python3 bookmarkBackup.py --setup
+# Simply run any command - setup happens automatically
+python3 bookmarkBackup.py -l
 ```
 
-This will prompt you to:
-1. Select which Windows user account to backup
-2. Choose backup directory (suggests OneDrive by default)
+**The script will prompt you for:**
+1. **Backup Directory** - Suggests OneDrive location, allows custom path
+2. **Windows User** - Shows available users, prompts for selection
 
-### Basic Usage
+**Example first run:**
+```bash
+$ python3 bookmarkBackup.py -l
+
+=== First Time Setup: Backup Directory ===
+Please specify where to store your bookmark backups.
+Suggested location: /mnt/c/Users/tameg/OneDrive/bookmarks
+
+Use suggested location? (y/n): y
+✓ Backup directory saved: /mnt/c/Users/tameg/OneDrive/bookmarks
+
+=== First Time Setup: Windows User Selection ===
+Available Windows user accounts:
+  1. adell
+  2. tameg
+  3. WsiAccount
+
+Select user account (1-3): 2
+✓ User 'tameg' saved for future backups.
+```
+
+### Basic Usage (After Setup)
 
 ```bash
 # Perform backup with verbose output
@@ -82,11 +111,17 @@ python3 bookmarkBackup.py -l
 
 ## ⚙️ Configuration
 
-### Configuration Commands
+### Automatic Configuration
+
+The script automatically prompts for configuration on first run:
+- **Backup Directory** - Suggests `/mnt/c/Users/username/OneDrive/bookmarks`
+- **Windows User** - Lists accessible Windows users for selection
+
+### Manual Configuration Commands
 
 | Command | Description |
 |---------|-------------|
-| `--setup` | Complete initial setup |
+| `--setup` | Force complete setup (optional - happens automatically) |
 | `--show-config` | Display current configuration |
 | `--configure-user` | Change Windows user selection |
 | `--configure-backup` | Change backup directory |
@@ -221,11 +256,11 @@ Place in Windows startup folder: `Win + R` → `shell:startup`
 ### Basic Operations
 
 ```bash
+# First run - automatic setup prompts will appear
+python3 bookmarkBackup.py -l
+
 # Show current configuration
 python3 bookmarkBackup.py --show-config
-
-# List available Brave profiles
-python3 bookmarkBackup.py -l
 
 # Test backup (no files created)
 python3 bookmarkBackup.py -t
@@ -233,7 +268,7 @@ python3 bookmarkBackup.py -t
 # Perform backup with detailed output
 python3 bookmarkBackup.py -v
 
-# Backup to specific location
+# Backup to specific location (overrides saved config)
 python3 bookmarkBackup.py -v /mnt/c/MyBackups/brave
 
 # Keep only 10 most recent backups
@@ -249,7 +284,7 @@ python3 bookmarkBackup.py --configure-user
 # Change backup directory
 python3 bookmarkBackup.py --configure-backup
 
-# Complete reconfiguration
+# Force complete reconfiguration (optional)
 python3 bookmarkBackup.py --setup
 ```
 
@@ -277,10 +312,12 @@ with open(sys.argv[1], 'r') as f:
 | Issue | Solution |
 |-------|----------|
 | **Permission denied** | Ensure WSL has access to Windows user directories |
+| **No setup prompts appear** | Delete `~/.brave_backup_config.json` and run again |
 | **No Brave profiles found** | Run `--configure-user` to select correct Windows user |
 | **Backup directory not accessible** | Run `--configure-backup` to set valid path |
 | **Task Scheduler not running** | Check Task Scheduler history and enable logging |
 | **WSL not starting** | Restart WSL: `wsl --shutdown` then `wsl` |
+| **Setup prompts skipped** | Configuration exists, use `--setup` to force reconfiguration |
 
 ### Debug Commands
 
@@ -314,25 +351,29 @@ Get-EventLog -LogName Application -Source "BraveBackup" -Newest 10
 ```
 brave-backup-wsl/
 ├── bookmarkBackup.py          # Main backup script
-├── brave_diagnostic.py        # Diagnostic tool
-├── README.md                  # This file
+├── brave_diagnostic.py        # Diagnostic tool  
+├── README.md                  # This documentation
+├── LICENSE                    # MIT License file
 ├── examples/
-│   ├── brave_backup.bat      # Windows batch file
-│   ├── BraveBackup.ps1       # PowerShell script
-│   └── brave-backup.service  # systemd service
+│   ├── brave_backup.bat       # Windows batch file example
+│   ├── BraveBackup.ps1        # PowerShell script example
+│   └── brave-backup.service   # systemd service example
 └── logs/
-    └── brave_backup.log       # Log file location
+    └── brave_backup.log        # Default log file location
 ```
 
 ## 🎯 Best Practices
 
 ### Recommended Setup
 
+For most users in WSL, I recommend:
 1. **Use OneDrive backup location** for automatic cloud sync
-2. **Schedule daily backups** at 2:00 AM when system is idle
+2. **Schedule daily backups** at 2:00 AM when computer is likely idle  
 3. **Keep 30 days of backups** (default) for recovery options
 4. **Enable logging** to monitor backup success
 5. **Test scheduling** before relying on automation
+
+For detailed setup instructions, see the [Scheduling Options](#scheduling-options) section.
 
 ### Security Considerations
 
@@ -358,6 +399,16 @@ python3 bookmarkBackup.py --setup
 # Run diagnostic
 python3 brave_diagnostic.py
 ```
+
+### Testing
+
+Before submitting changes:
+
+1. Test on WSL with different Windows users
+2. Verify configuration prompts work correctly
+3. Test all scheduling options
+4. Ensure error handling works properly
+5. Update documentation as needed
 
 ## 📄 License
 
