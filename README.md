@@ -42,11 +42,19 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
 
 ### Setup
 
-1. **Clone or download the script:**
+1. **Clone the repository:**
    ```bash
-   wget https://raw.githubusercontent.com/yourusername/brave-backup-wsl/main/bookmarkBackup.py
-   # or
-   curl -O https://raw.githubusercontent.com/yourusername/brave-backup-wsl/main/bookmarkBackup.py
+   git clone https://github.com/z3r0-c001/BrowserBackup.git
+   cd BrowserBackup
+   ```
+
+   **Or download individual files:**
+   ```bash
+   # Download main backup script
+   wget https://raw.githubusercontent.com/z3r0-c001/BrowserBackup/main/bookmarkBackup.py
+   
+   # Download diagnostic script (optional)
+   wget https://raw.githubusercontent.com/z3r0-c001/BrowserBackup/main/brave_diagnostic.py
    ```
 
 2. **Make executable:**
@@ -349,7 +357,7 @@ Get-EventLog -LogName Application -Source "BraveBackup" -Newest 10
 ## File Structure
 
 ```
-brave-backup-wsl/
+BrowserBackup/
 ├── bookmarkBackup.py          # Main backup script
 ├── brave_diagnostic.py        # Diagnostic tool  
 ├── README.md                  # This documentation
@@ -390,8 +398,8 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/brave-backup-wsl.git
-cd brave-backup-wsl
+git clone https://github.com/z3r0-c001/BrowserBackup.git
+cd BrowserBackup
 
 # Test installation
 python3 bookmarkBackup.py --setup
