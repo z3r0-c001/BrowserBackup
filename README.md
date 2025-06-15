@@ -100,7 +100,7 @@ Available Windows user accounts:
   2. user2
   3. WsiAccount
 
-Select user account (1-3): 2
+Select user account (1-3): 1
 ✓ User 'user1' saved for future backups.
 ```
 
