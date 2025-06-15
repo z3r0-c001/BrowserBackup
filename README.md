@@ -96,12 +96,12 @@ Use suggested location? (y/n): y
 
 === First Time Setup: Windows User Selection ===
 Available Windows user accounts:
-  1. adell
-  2. tameg
+  1. user1
+  2. user2
   3. WsiAccount
 
 Select user account (1-3): 2
-✓ User 'tameg' saved for future backups.
+✓ User 'user1' saved for future backups.
 ```
 
 ### Basic Usage (After Setup)
