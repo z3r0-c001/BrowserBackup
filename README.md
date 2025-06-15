@@ -1,20 +1,23 @@
-# Brave Bookmark Backup for WSL
+# Multi-Browser Bookmark Backup for WSL
 
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-WSL-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-A Python script to automatically backup Brave browser bookmarks from WSL (Windows Subsystem for Linux) to a configurable location with scheduling support.
+A Python script to automatically backup browser bookmarks from WSL (Windows Subsystem for Linux) to a configurable location with scheduling support.
+
+**Supported Browsers:** Chrome, Edge, Brave, and custom browser paths
 
 ## 🚀 Features
 
-- **Cross-platform bookmark detection** - Automatically finds Brave bookmarks on Windows from WSL
-- **Automatic first-run setup** - Prompts for user and backup directory on first use
+- **Multi-browser support** - Chrome, Edge, Brave, and custom browser paths
+- **Cross-platform bookmark detection** - Automatically finds browser bookmarks on Windows from WSL
+- **Automatic first-run setup** - Prompts for browser, user and backup directory on first use
 - **Smart configuration** - Suggests OneDrive folder for automatic cloud backup
 - **Multiple scheduling options** - Works around WSL cron limitations
 - **Persistent configuration** - Saves settings for future runs
 - **Backup rotation** - Keeps only the most recent N backups
-- **Multiple profile support** - Backs up all Brave browser profiles
+- **Multiple profile support** - Backs up all browser profiles
 - **Permission handling** - Gracefully handles WSL permission issues
 
 ## 📋 Table of Contents
@@ -37,7 +40,7 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
 
 - Windows 10/11 with WSL enabled
 - Python 3.8 or higher
-- Brave browser installed on Windows
+- Supported browser installed on Windows (Chrome, Edge, Brave, or custom Chromium-based browser)
 - Access to Windows user directories from WSL
 
 ### Setup
@@ -80,8 +83,9 @@ python3 bookmarkBackup.py -l
 ```
 
 **The script will prompt you for:**
-1. **Backup Directory** - Suggests OneDrive location, allows custom path
-2. **Windows User** - Shows available users, prompts for selection
+1. **Browser Selection** - Choose Chrome, Edge, Brave, or specify custom path
+2. **Backup Directory** - Suggests OneDrive location, allows custom path
+3. **Windows User** - Shows available users, prompts for selection
 
 **Example first run:**
 ```bash
@@ -94,7 +98,17 @@ Suggested location: /mnt/c/Users/user1/OneDrive/bookmarks
 Use suggested location? (y/n): y
 ✓ Backup directory saved: /mnt/c/Users/user1/OneDrive/bookmarks
 
-=== First Time Setup: Windows User Selection ===
+=== Browser Selection ===
+Select the browser you want to backup:
+  1. Google Chrome
+  2. Microsoft Edge
+  3. Brave Browser
+  4. Custom browser (specify path)
+
+Select browser (1-4): 1
+✓ Browser 'Google Chrome' configured for backups.
+
+=== Windows User Selection ===
 Available Windows user accounts:
   1. user1
   2. user2
@@ -122,6 +136,7 @@ python3 bookmarkBackup.py -l
 ### Automatic Configuration
 
 The script automatically prompts for configuration on first run:
+- **Browser Selection** - Choose from Chrome, Edge, Brave, or custom path
 - **Backup Directory** - Suggests `/mnt/c/Users/username/OneDrive/bookmarks`
 - **Windows User** - Lists accessible Windows users for selection
 
@@ -131,16 +146,27 @@ The script automatically prompts for configuration on first run:
 |---------|-------------|
 | `--setup` | Force complete setup (optional - happens automatically) |
 | `--show-config` | Display current configuration |
+| `--configure-browser` | Change browser selection |
 | `--configure-user` | Change Windows user selection |
 | `--configure-backup` | Change backup directory |
-| `--configure` | Reconfigure user and backup directory |
+| `--configure` | Reconfigure browser, user and backup directory |
 
 ### Configuration File
 
-Settings are stored in `~/.brave_backup_config.json`:
+Settings are stored in `~/.browser_backup_config.json`:
 
 ```json
 {
+  "browser": "chrome",
+  "windows_user": "user1",
+  "backup_path": "/mnt/c/Users/user1/OneDrive/bookmarks"
+}
+```
+
+**For custom browsers:**
+```json
+{
+  "browser": {"custom": "/path/to/browser/data"},
   "windows_user": "user1",
   "backup_path": "/mnt/c/Users/user1/OneDrive/bookmarks"
 }
@@ -158,8 +184,10 @@ Options:
   -m, --max-backups N  Maximum backups to keep (default: 30)
   --setup              Run initial setup
   --show-config        Show current configuration
+  --configure-browser  Configure browser selection only
   --configure-user     Configure Windows user only
   --configure-backup   Configure backup directory only
+  --configure          Configure browser, user and backup directory
 ```
 
 ## Scheduling Options
@@ -286,6 +314,9 @@ python3 bookmarkBackup.py -v -m 10
 ### Configuration Changes
 
 ```bash
+# Change browser
+python3 bookmarkBackup.py --configure-browser
+
 # Change Windows user
 python3 bookmarkBackup.py --configure-user
 
@@ -299,8 +330,13 @@ python3 bookmarkBackup.py --setup
 ### Monitoring and Verification
 
 ```bash
-# List recent backups
-ls -la /mnt/c/Users/user1/OneDrive/bookmarks/brave_bookmarks_*.json
+# List recent backups (files now include browser name)
+ls -la /mnt/c/Users/user1/OneDrive/bookmarks/*_bookmarks_*.json
+
+# Examples of backup files:
+# chrome_bookmarks_default_20241215_143022.json
+# edge_bookmarks_profile_1_20241215_143025.json
+# brave_bookmarks_default_20241215_143028.json
 
 # Check backup file integrity
 python3 -c "
@@ -320,8 +356,10 @@ with open(sys.argv[1], 'r') as f:
 | Issue | Solution |
 |-------|----------|
 | **Permission denied** | Ensure WSL has access to Windows user directories |
-| **No setup prompts appear** | Delete `~/.brave_backup_config.json` and run again |
-| **No Brave profiles found** | Run `--configure-user` to select correct Windows user |
+| **No setup prompts appear** | Delete `~/.browser_backup_config.json` and run again |
+| **No browser profiles found** | Run `--configure-browser` to select correct browser |
+| **Browser not detected** | Try `--configure-browser` and select custom path |
+| **No Windows user found** | Run `--configure-user` to select correct Windows user |
 | **Backup directory not accessible** | Run `--configure-backup` to set valid path |
 | **Task Scheduler not running** | Check Task Scheduler history and enable logging |
 | **WSL not starting** | Restart WSL: `wsl --shutdown` then `wsl` |
@@ -424,9 +462,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Brave Software for the excellent browser
+- Google, Microsoft, and Brave Software for their excellent browsers
 - Microsoft for WSL integration
 - Python community for excellent libraries
+- Chromium project for consistent bookmark format across browsers
 
 ---
 
@@ -439,8 +478,8 @@ If you encounter any issues:
 1. Check the [Troubleshooting](#troubleshooting) section
 2. Run the diagnostic script: `python3 brave_diagnostic.py`
 3. Open an issue with detailed error information
-4. Include your WSL version and Python version
+4. Include your WSL version, Python version, and browser type
 
 ---
 
-*Made with ❤️ for the WSL and Brave community*
+*Made with ❤️ for the WSL and browser community*
