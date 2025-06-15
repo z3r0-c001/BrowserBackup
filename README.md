@@ -89,10 +89,10 @@ $ python3 bookmarkBackup.py -l
 
 === First Time Setup: Backup Directory ===
 Please specify where to store your bookmark backups.
-Suggested location: /mnt/c/Users/tameg/OneDrive/bookmarks
+Suggested location: /mnt/c/Users/user1/OneDrive/bookmarks
 
 Use suggested location? (y/n): y
-✓ Backup directory saved: /mnt/c/Users/tameg/OneDrive/bookmarks
+✓ Backup directory saved: /mnt/c/Users/user1/OneDrive/bookmarks
 
 === First Time Setup: Windows User Selection ===
 Available Windows user accounts:
@@ -141,8 +141,8 @@ Settings are stored in `~/.brave_backup_config.json`:
 
 ```json
 {
-  "windows_user": "tameg",
-  "backup_path": "/mnt/c/Users/tameg/OneDrive/bookmarks"
+  "windows_user": "user1",
+  "backup_path": "/mnt/c/Users/user1/OneDrive/bookmarks"
 }
 ```
 
@@ -300,7 +300,7 @@ python3 bookmarkBackup.py --setup
 
 ```bash
 # List recent backups
-ls -la /mnt/c/Users/tameg/OneDrive/bookmarks/brave_bookmarks_*.json
+ls -la /mnt/c/Users/user1/OneDrive/bookmarks/brave_bookmarks_*.json
 
 # Check backup file integrity
 python3 -c "
