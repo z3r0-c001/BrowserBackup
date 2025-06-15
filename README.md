@@ -31,7 +31,7 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
 - [License](#license)
 - [Support](#support)
 
-## 🛠 Installation
+## Installation
 
 ### Prerequisites
 
@@ -60,7 +60,7 @@ A Python script to automatically backup Brave browser bookmarks from WSL (Window
    ```
    *The script will automatically prompt for configuration on first use.*
 
-## 🚀 Quick Start
+## Quick Start
 
 ### First Time Setup (Automatic)
 
@@ -109,7 +109,7 @@ python3 bookmarkBackup.py -t
 python3 bookmarkBackup.py -l
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Automatic Configuration
 
@@ -154,7 +154,7 @@ Options:
   --configure-backup   Configure backup directory only
 ```
 
-## 📅 Scheduling Options
+## Scheduling Options
 
 Since cron doesn't work reliably in WSL, here are several scheduling alternatives:
 
@@ -251,7 +251,7 @@ wsl python3 /mnt/c/path/to/bookmarkBackup.py -v
 
 Place in Windows startup folder: `Win + R` → `shell:startup`
 
-## 📊 Usage Examples
+## Usage Examples
 
 ### Basic Operations
 
@@ -305,7 +305,7 @@ with open(sys.argv[1], 'r') as f:
 # Verify OneDrive sync status (if using OneDrive)
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -346,7 +346,7 @@ tail -f /mnt/c/logs/brave_backup.log
 Get-EventLog -LogName Application -Source "BraveBackup" -Newest 10
 ```
 
-## 📂 File Structure
+## File Structure
 
 ```
 brave-backup-wsl/
@@ -362,7 +362,7 @@ brave-backup-wsl/
     └── brave_backup.log        # Default log file location
 ```
 
-## 🎯 Best Practices
+## Best Practices
 
 ### Recommended Setup
 
@@ -382,7 +382,7 @@ For detailed setup instructions, see the [Scheduling Options](#scheduling-option
 - **Sensitive bookmarks**: Consider encrypting backup files if they contain sensitive data
 - **Access logs**: Monitor backup logs for unauthorized access
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -410,7 +410,7 @@ Before submitting changes:
 4. Ensure error handling works properly
 5. Update documentation as needed
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -424,7 +424,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ If this project helped you, please consider giving it a star!**
 
-## 📞 Support
+## Support
 
 If you encounter any issues:
 
